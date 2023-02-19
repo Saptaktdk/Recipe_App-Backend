@@ -1,17 +1,21 @@
 import express from "express"
-import { ProfileController } from "../controllers/Profile"
+import { RecipeController } from "../controllers/Recipe"
 import { TokenMiddleWare } from "../../middleware/verifyToken"
 
-const profileController = new ProfileController()
-const ProfileRouter = express.Router()
+const recipeController = new RecipeController()
+const RecipeRouter = express.Router()
 
-ProfileRouter.get("/", profileController.getProfileByName)
-ProfileRouter.get("/:id", profileController.getProfileById)
-ProfileRouter.put("/update", TokenMiddleWare, profileController.updateProfile)
-ProfileRouter.delete(
-	"/delete",
+RecipeRouter.get("/all", recipeController.getAllRecipe)
+RecipeRouter.get("/", recipeController.getRecipeByName)
+RecipeRouter.get("/:id", recipeController.getRecipeById)
+RecipeRouter.post("/add", TokenMiddleWare, recipeController.addRecipe)
+RecipeRouter.put("/update/:id", TokenMiddleWare, recipeController.updateRecipe)
+RecipeRouter.delete(
+	"/delete/:id",
 	TokenMiddleWare,
-	profileController.deleteProfile
+	recipeController.deleteRecipeById
 )
+RecipeRouter.delete("/", TokenMiddleWare, recipeController.deleteAllRecipes)
 
-export { ProfileRouter }
+export { RecipeRouter }
+
