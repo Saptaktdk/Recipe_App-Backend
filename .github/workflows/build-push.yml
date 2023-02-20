@@ -1,0 +1,37 @@
+name: Build and push the recipe_app backend to Dockerhub
+
+on: 
+  push:
+    branches: [main]
+
+jobs:
+  build_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout into main
+        uses: actions/checkout@v3
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Setup docker buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Grab the current version of the service
+        run: |
+          VER=$(  grep RECIPE_VERSION .env | cut -f 2 -d "=" | tr "\"" "\n" )
+          echo "USERNAME= " >> $GITHUB_ENV
+          echo "VERSION=$VER" >> $GITHUB_ENV
+          echo "REPO=" >> $GITHUB_ENV
+      
+      - name: Build and push to Dockerhub
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile
+          platform: linux/amd64, linux/arm64
+          push: true
+          tags: ${{ env.USERNAME }}/${{ env.REPO }}:${{ env.VERSION }}
