@@ -23,7 +23,7 @@ jobs:
       - name: Grab version from .env file 
         run: |
           VER=$(  grep RECIPE_VERSION .env | cut -f 2 -d "=" | tr "\"" "\n" )
-          echo "USERNAME=Saptaktdk123" >> $GITHUB_ENV
+          echo "USERNAME=saptaktdk123" >> $GITHUB_ENV
           echo "VERSION=$VER" >> $GITHUB_ENV
           echo "REPO=recipe" >> $GITHUB_ENV
       
