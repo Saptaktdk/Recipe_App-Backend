@@ -31,14 +31,14 @@ def main():
     #?create tokenTable
     createTokenTable(cursor, connection)
 
-    #? Insert Profile    
+    """ #? Insert Profile    
     insertProfile(cursor,connection)
 
     #? Insert Recipe
     insertRecipe(cursor,connection)
 
     #? Insert Token
-    insertToken(cursor,connection)
+    insertToken(cursor,connection) """
 
 
     #?closing the connection

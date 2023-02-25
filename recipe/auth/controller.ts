@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import {Request, Response} from "express"
 import { ProfileQuery } from "../query/Profile"
 import { TokenQuery } from "../query/Token"
 import {

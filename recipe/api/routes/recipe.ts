@@ -6,7 +6,7 @@ const recipeController = new RecipeController()
 const RecipeRouter = express.Router()
 
 RecipeRouter.get("/all", recipeController.getAllRecipe)
-RecipeRouter.get("/", recipeController.getRecipeByName)
+RecipeRouter.get("/", recipeController.getRecipeByQuery)
 RecipeRouter.get("/:id", recipeController.getRecipeById)
 RecipeRouter.post("/add", TokenMiddleWare, recipeController.addRecipe)
 RecipeRouter.put("/update/:id", TokenMiddleWare, recipeController.updateRecipe)
