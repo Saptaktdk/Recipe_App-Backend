@@ -32,6 +32,6 @@ jobs:
         with:
           context: .
           file: dockerfiles/Dockerfile.prod
-          platform: linux/amd64,linux/arm64
+          platform: linux/amd64, linux/arm64
           push: true
           tags: ${{ env.USERNAME }}/${{ env.REPO }}:${{ env.VERSION }}
