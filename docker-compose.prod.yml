@@ -1,0 +1,70 @@
+version: "3.1"
+services:
+    auth:
+        #? Interactive shell
+        stdin_open: true
+        tty: true
+
+        #? Set container name
+        container_name: recipe_auth
+
+        #? Pull image by version
+        image: saptaktdk123/recipe:${RECIPE_VERSION}
+
+        #? Environment file
+        env_file:
+            - '.env'
+            - '.env.prod'
+
+        #? Define entrypoint
+        entrypoint: 'npm run start:auth[prod]'
+
+        #? Restart if down
+        restart: always
+
+        #? Ports
+        ports:
+            - ${RECIPE_AUTH_PORT}:${RECIPE_AUTH_PORT}
+
+        #? Container dependencies
+        depends_on:
+            - db
+
+    api:
+        #? Interactive shell
+        stdin_open: true
+        tty: true
+
+        #? Set container name
+        container_name: recipe_api
+
+        #? Pull image by version
+        image: saptaktdk123/recipe:${RECIPE_VERSION}
+
+        #? Environment file
+        env_file:
+            - '.env'
+            - '.env.prod'
+
+        #? Define entrypoint
+        entrypoint: 'npm run start:api[prod]'
+
+        #? Restart if down
+        restart: always
+
+        #? Ports
+        ports:
+            - ${RECIPE_API_PORT}:${RECIPE_API_PORT}
+
+        #? Container dependencies
+        depends_on:
+            - db
+
+    db:
+        container_name: recipe_db
+        image: postgres
+        restart: always
+        env_file:
+            - ".env.db"
+        ports:
+            - ${RECIPE_DB_PORT}:${RECIPE_DB_PORT}
