@@ -39,7 +39,7 @@ class RecipeController {
 			return true
 		}
 
-		//* Handle for Update Education
+		//* Handle for Update Recipe
 		if (router === "UPDATE") {
 			//? Handle optional fields
 			for (let i = 0; i < reqBodyKeys.length; i++) {
@@ -101,31 +101,49 @@ class RecipeController {
 		return ResponseBody.handleResponse(response, getRecipeByIdQueryResponse)
 	}
 
-	//TODO: Get Recipe by Name (public)
-	async getRecipeByName(
+	//TODO: Get Recipe by Name or Author or Both(public)
+	async getRecipeByQuery(
 		request: Request,
 		response: Response
 	): Promise<Response> {
 		const recipeQuery: RecipeQueryType = request.query
+		let recipeByQuery: DBQueryType
 
 		//? Handle Bad Request
-		if (!RequestBodyHandler.isValidMandatoryFields(recipeQuery, ["name"]))
+		if (!RequestBodyHandler.isValidOptionalFields(recipeQuery, ["name","author"]))
 			return ResponseBody.handleBadRequest(response)
 
-		//? Build the query to fetch by name
-		const getRecipeByNameQuery: DBQueryType = {
-			text: `SELECT * FROM recipes WHERE name = $1`,
-			values: [recipeQuery.name]
+		//? Check if the query is by name or author
+		if(request.query.hasOwnProperty('name') && request.query.hasOwnProperty('author')) {
+			//? Build the query to fetch by name and author
+		 	recipeByQuery = {
+				text: `SELECT * FROM recipes WHERE name = $1 and author = $2`,
+				values: [recipeQuery.name, recipeQuery.author]
+			}
+		}
+		else if(request.query.hasOwnProperty('name')) {
+			//? Build the query to fetch by name
+			recipeByQuery = {
+				text: `SELECT * FROM recipes WHERE name = $1`,
+				values: [recipeQuery.name]
+			}
+		}
+		else if(request.query.hasOwnProperty('author')) {
+			//? Build the query to fetch by author
+			recipeByQuery = {
+				text: `SELECT * FROM recipes WHERE author = $1`,
+				values: [recipeQuery.author]
+			}
 		}
 
 		//? Get recipe by query
-		const getRecipeByNameQueryResponse: ResponseBodyType =
-			await RecipeQuery.get(getRecipeByNameQuery)
+		const getRecipeByQueryResponse: ResponseBodyType =
+			await RecipeQuery.get(recipeByQuery)
 
 		//? Handle the response
 		return ResponseBody.handleResponse(
 			response,
-			getRecipeByNameQueryResponse
+			getRecipeByQueryResponse
 		)
 	}
 
@@ -176,12 +194,13 @@ class RecipeController {
 
 		//? Build the query to insert the recipe
 		const addRecipeQuery: DBQueryType = {
-			text: "insert into recipes(name,ingredients,directions,profile_id) values($1, $2, $3, $4)",
+			text: "insert into recipes(name,ingredients,directions,profile_id,author) values($1, $2, $3, $4, $5)",
 			values: [
 				inputRecipeDetails.name,
 				inputRecipeDetails.ingredients,
 				inputRecipeDetails.directions,
-				inputRecipeDetails.profile_id
+				inputRecipeDetails.profile_id,
+				profile.name
 			]
 		}
 
@@ -218,13 +237,14 @@ class RecipeController {
 
 		//? Build the update query
 		const updateRecipeQuery: DBQueryType = {
-			text: "update recipes SET name = $2, ingredients = $3 , directions = $4 where id = $1 and profile_id = $5",
+			text: "update recipes SET name = $2, ingredients = $3 , directions = $4 where id = $1, profile_id = $5 and author = $6",
 			values: [
 				recipeId,
 				inputRecipeDetails.name,
 				inputRecipeDetails.ingredients,
 				inputRecipeDetails.directions,
-				profile.id
+				profile.id,
+				profile.name
 			]
 		}
 

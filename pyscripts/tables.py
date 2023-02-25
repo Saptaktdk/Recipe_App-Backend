@@ -4,7 +4,7 @@ TOKEN_TABLE = "tokens"
 
 
 def createRecipeTable(cursor,connection): 
-    query = "create table {} (id bigserial primary key not null, name varchar(128) not null, ingredients varchar(256) not null, directions varchar(256) not null, profile_id int not null);".format(RECIPE_TABLE)
+    query = "create table {} (id bigserial primary key not null, name varchar(128) not null, ingredients varchar(256) not null, directions varchar(256) not null, profile_id int not null, author varchar(128) not null);".format(RECIPE_TABLE)
 
     #? initialise the recipe table
     cursor.execute(query)

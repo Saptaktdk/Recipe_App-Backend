@@ -10,6 +10,7 @@ export type RecipeQueryType = {
 	ingredients?: String
 	directions?: String
 	profile_id?: String
+	author?: String
 }
 
 export type TokenQueryType = {
