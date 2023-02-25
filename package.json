@@ -1,6 +1,6 @@
 {
   "name": "recipe_app-backend-",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "scripts": {
     "start:auth[local]": "cross-env NODE_ENV=local nodemon auth.ts",
@@ -11,12 +11,12 @@
     "start:api[dev]": "cross-env NODE_ENV=dev nodemon api.ts",
     "start:admin[dev]": "cross-env NODE_ENV=dev nodemon admin.ts",
 
-    "start:auth[staging]": "cross-env NODE_ENV=staging node dist/auth.ts",
-    "start:api[staging]": "cross-env NODE_ENV=staging node dist/api.ts",
-    "start:admin[staging]": "cross-env NODE_ENV=staging node dist/admin.ts",
+    "start:auth[staging]": "cross-env NODE_ENV=staging node dist/auth.js",
+    "start:api[staging]": "cross-env NODE_ENV=staging node dist/api.js",
+    "start:admin[staging]": "cross-env NODE_ENV=staging node dist/admin.js",
 
-    "start:auth[prod]": "cross-env NODE_ENV=prod node dist/auth.ts",
-    "start:api[prod]": "cross-env NODE_ENV=prod node dist/api.ts",
+    "start:auth[prod]": "cross-env NODE_ENV=prod node dist/auth.js",
+    "start:api[prod]": "cross-env NODE_ENV=prod node dist/api.js",
 
     "test:inspect": "python tests/main.py",
 
