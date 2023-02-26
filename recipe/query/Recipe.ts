@@ -20,7 +20,7 @@ class RecipeQuery {
 			if (getRecipeResponse?.rows.length === 1)
 				return ResponseStatusHandler.success_get_one(
 					RecipeQuery.schema,
-					getRecipeResponse.rows[0]
+					getRecipeResponse.rows
 				)
 
 			if (getRecipeResponse?.rows.length > 1)
