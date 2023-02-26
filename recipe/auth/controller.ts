@@ -21,6 +21,7 @@ import {
 	generateRefreshToken,
 	verifyToken
 } from "../utils/handleToken"
+import { generateRandomId } from "../utils/generateId"
 
 //? Authentication Controller
 class AuthController {
@@ -67,11 +68,14 @@ class AuthController {
 			inputProfileDetails.password = await hashPassword(
 				inputProfileDetails.password.toString()
 			)
+			
+			const profileId = generateRandomId()
 
 			//? register profile
 			const addProfileQuery = {
-				text: "INSERT INTO profiles(name,email,password) values($1,$2,$3)",
+				text: "INSERT INTO profiles(id,name,email,password) values($1,$2,$3,$4)",
 				values: [
+					profileId,
 					inputProfileDetails.name,
 					inputProfileDetails.email,
 					inputProfileDetails.password
@@ -112,16 +116,8 @@ class AuthController {
 			values: [inputProfileDetails.email]
 		}
 
-		//? declare a variable to store the response
-		let existingProfileResponse: ResponseBodyType
-
 		//? Check user by email or username in the database
-		if (
-			RequestBodyHandler.isValidMandatoryFields(inputProfileDetails, [
-				"email"
-			])
-		)
-			existingProfileResponse = await ProfileQuery.get(
+		const existingProfileResponse: ResponseBodyType = await ProfileQuery.get(
 				getExistingProfileQuery
 			)
 
@@ -157,6 +153,8 @@ class AuthController {
 		const accessToken: String = generateAccessToken(payload)
 		const refreshToken: String = generateRefreshToken(payload)
 
+
+
 		//TODO: ------------- Queries -----------------------
 		//? Get token query
 		const getTokenQuery: DBQueryType = {
@@ -164,10 +162,13 @@ class AuthController {
 			values: [profileEntity.id.toString()]
 		}
 
+		//? Cretae token Id
+		const tokenId = generateRandomId()
+
 		//? Add Token Query
 		const addTokenQuery: DBQueryType = {
-			text: "INSERT INTO tokens (token,profile_id) VALUES ($1,$2)",
-			values: [refreshToken, payload.id]
+			text: "INSERT INTO tokens (id,token,profile_id) VALUES ($1,$2,$3)",
+			values: [tokenId,refreshToken, payload.id]
 		}
 
 		//? Update token to db if found , else add the token

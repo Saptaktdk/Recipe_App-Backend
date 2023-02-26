@@ -5,7 +5,7 @@ import { TokenMiddleWare } from "../../middleware/verifyToken"
 const profileController = new ProfileController()
 const ProfileRouter = express.Router()
 
-ProfileRouter.get("/", profileController.getProfileByName)
+ProfileRouter.get("/", TokenMiddleWare, profileController.getProfile)
 ProfileRouter.get("/:id", profileController.getProfileById)
 ProfileRouter.put("/update", TokenMiddleWare, profileController.updateProfile)
 ProfileRouter.delete(

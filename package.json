@@ -6,20 +6,15 @@
     "start:auth[local]": "cross-env NODE_ENV=local nodemon auth.ts",
     "start:api[local]": "cross-env NODE_ENV=local nodemon api.ts",
     "start:admin[local]": "cross-env NODE_ENV=local nodemon admin.ts",
-
     "start:auth[dev]": "cross-env NODE_ENV=dev nodemon auth.ts",
     "start:api[dev]": "cross-env NODE_ENV=dev nodemon api.ts",
     "start:admin[dev]": "cross-env NODE_ENV=dev nodemon admin.ts",
-
     "start:auth[staging]": "cross-env NODE_ENV=staging node dist/auth.js",
     "start:api[staging]": "cross-env NODE_ENV=staging node dist/api.js",
     "start:admin[staging]": "cross-env NODE_ENV=staging node dist/admin.js",
-
     "start:auth[prod]": "cross-env NODE_ENV=prod node dist/auth.js",
     "start:api[prod]": "cross-env NODE_ENV=prod node dist/api.js",
-
     "test:inspect": "python tests/main.py",
-
     "init:db": "bash pyscripts/init_db.sh",
     "build": "tsc -p .",
     "prettier": "prettier --write .",
@@ -54,6 +49,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "pg": "^8.9.0",
-    "postgres": "^3.3.3"
+    "postgres": "^3.3.3",
+    "uuid": "^9.0.0"
   }
 }

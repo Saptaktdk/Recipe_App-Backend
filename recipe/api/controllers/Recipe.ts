@@ -9,6 +9,7 @@ import {
 import { ResponseBodyType } from "../../types/response"
 import { RecipeSchemaType, RecipeUpdateType } from "../../types/schema"
 import { RECIPE_FIELDS } from "../../utils/constants"
+import { generateRandomId } from "../../utils/generateId"
 import { RequestBodyHandler } from "../../utils/handleFields"
 import { ResponseBody } from "../../utils/handleResponse"
 
@@ -71,6 +72,8 @@ class RecipeController {
 		//? Get all recipes from the database
 		const getAllRecipeQueryResponse: ResponseBodyType =
 			await RecipeQuery.get(getAllRecipeQuery)
+
+		console.log("Response: ", getAllRecipeQueryResponse)
 
 		//? Handle the response
 		return ResponseBody.handleResponse(response, getAllRecipeQueryResponse)
@@ -192,10 +195,14 @@ class RecipeController {
 		//? Set the profile id from the middleware
 		inputRecipeDetails.profile_id = profile.id.toString()
 
+		//? Create Id 
+		const recipeId = generateRandomId()
+
 		//? Build the query to insert the recipe
 		const addRecipeQuery: DBQueryType = {
-			text: "insert into recipes(name,ingredients,directions,profile_id,author) values($1, $2, $3, $4, $5)",
+			text: "insert into recipes(id,name,ingredients,directions,profile_id,author) values($1, $2, $3, $4, $5,$6)",
 			values: [
+				recipeId,
 				inputRecipeDetails.name,
 				inputRecipeDetails.ingredients,
 				inputRecipeDetails.directions,
@@ -234,23 +241,29 @@ class RecipeController {
 			!RecipeController.isValidSchema(inputRecipeDetails, "UPDATE")
 		)
 			return ResponseBody.handleBadRequest(response)
+		
+		
 
 		//? Build the update query
 		const updateRecipeQuery: DBQueryType = {
-			text: "update recipes SET name = $2, ingredients = $3 , directions = $4 where id = $1, profile_id = $5 and author = $6",
+			text: "update recipes SET name = $2 , ingredients = $3 , directions = $4 where id = $1",
 			values: [
 				recipeId,
 				inputRecipeDetails.name,
 				inputRecipeDetails.ingredients,
-				inputRecipeDetails.directions,
-				profile.id,
-				profile.name
+				inputRecipeDetails.directions
 			]
 		}
+
+		console.log("Before Update")
 
 		//? Update the recipe details in the database
 		const updateRecipeQueryResponse: ResponseBodyType =
 			await RecipeQuery.update(updateRecipeQuery)
+
+		console.log("Response: ", updateRecipeQueryResponse)
+
+		console.log("After Update")
 
 		//? Handle the response
 		return ResponseBody.handleResponse(response, updateRecipeQueryResponse)

@@ -5,6 +5,7 @@ import { DBQueryType } from "../types/query"
 import { ResponseStatusHandler } from "../utils/handleResponse"
 import { ProfileMiddlewareType } from "../types/middleware"
 
+
 class ProfileQuery {
 	static schema: string = "Profile"
 

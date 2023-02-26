@@ -28,32 +28,28 @@ class ProfileController {
 		return true
 	}
 
-	//TODO: Get Profile By Name
-	async getProfileByName(
+	//TODO: Get Profile (JWT: Authenticated Route)
+	async getProfile(
 		request: Request,
 		response: Response
 	): Promise<Response> {
-		//? Grab the profile name from query
-		const profileQuery: ProfileQueryType = request.query
-
-		//? Handle Bad Request
-		if (!RequestBodyHandler.isValidMandatoryFields(profileQuery, ["name"]))
-			return ResponseBody.handleBadRequest(response)
+		//? Grab the profile from the middleware
+		const profile: ProfileMiddlewareType = request["profile"]
 
 		//? Build the query to fetch by name
-		const getProfileByNameQuery: DBQueryType = {
-			text: "SELECT * FROM profiles WHERE lower(name) like '%' || $1 || '%'",
-			values: [profileQuery.name.toLowerCase()]
+		const getProfileQuery: DBQueryType = {
+			text: "SELECT * FROM profiles WHERE id=$1",
+			values: [profile.id]
 		}
 
 		//? Get Profile by Query
-		const getProfileByNameQueryResponse: ResponseBodyType =
-			await ProfileQuery.get(getProfileByNameQuery, true)
+		const getProfileQueryResponse: ResponseBodyType =
+			await ProfileQuery.get(getProfileQuery, true)
 
 		//? Handle Response
 		return ResponseBody.handleResponse(
 			response,
-			getProfileByNameQueryResponse
+			getProfileQueryResponse
 		)
 	}
 
