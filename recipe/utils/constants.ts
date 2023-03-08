@@ -16,6 +16,12 @@ export const RECIPE_ADMIN_PORT = process.env.RECIPE_ADMIN_PORT
 //? Database Connection URL
 export const RECIPE_DB_CONNECTION_URL = process.env.RECIPE_DB_CONNECTION_URL
 
+//? Redis connection URL
+export const RECIPE_REDIS_CONNECTION_URL = process.env.RECIPE_REDIS_CONNECTION_URL
+
+//? Redis Cache Expiration Time
+export const RECIPE_CACHE_EXPIRATION_TIME = process.env.RECIPE_CACHE_EXPIRATION_TIME
+
 //TODO: Database
 //? RECIPE Database Name
 export const RECIPE_DB_USER = process.env.RECIPE_DB_USER
