@@ -3,6 +3,23 @@ import cors from "cors"
 import { RecipeRouter } from "./recipe/api/routes/recipe"
 import { ProfileRouter } from "./recipe/api/routes/profile"
 import { RECIPE_API_PORT } from "./recipe/utils/constants"
+import { redisClient } from "./recipe/cache/redis"
+
+//TODO: Setup Redis Connection ----------------------
+//? Connect to redis
+;(async () => {
+	await redisClient.connect()
+})()
+
+//! Event Listener for error state
+redisClient.on("error", (err) => {
+	console.log("Error in connecting to Redis! Error: ", err)
+})
+
+//? Event Listener for ready state
+redisClient.on("ready", () => {
+	console.log("Redis Connected Successfully!")
+})
 
 //? Initialize Express app
 const app = express()

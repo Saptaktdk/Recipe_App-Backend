@@ -71,6 +71,31 @@ services:
         #? Container dependencies
         depends_on:
             - db
+    
+    redis:
+        #? Set container name
+        container_name: recipe_redis
+
+        #? Environment file
+        env_file:
+            - .env
+
+        #? Official redis Image
+        image: redis:7-alpine
+
+        #? restart container
+        restart: always
+
+        #? Ports
+        ports:
+            - ${RECIPE_REDIS_PORT}:${RECIPE_REDIS_PORT}
+
+        #? Entrypoint/Command
+        command: redis-server --loglevel warning
+
+        #? Container dependencies
+        depends_on:
+            - db
         
     db:
         container_name: recipe_db

@@ -1,4 +1,5 @@
 import { Request, Response } from "express"
+import { CachePolicy } from "../../cache/policy"
 import { RecipeQuery } from "../../query/Recipe"
 import { ProfileMiddlewareType } from "../../types/middleware"
 import {
@@ -69,6 +70,17 @@ class RecipeController {
 			values: []
 		}
 
+		//? Find key from Cache
+		const cacheHitResponse = await CachePolicy.isCacheHit("recipes")
+
+		//TODO: Check if key exists in the cache
+		if (cacheHitResponse["hit"] === true)
+			return ResponseBody.success_found(response, {
+				status: 200,
+				message: `All recipes fetched successfully`,
+				data: cacheHitResponse["value"]
+			})
+
 		//? Get all recipes from the database
 		const getAllRecipeQueryResponse: ResponseBodyType =
 			await RecipeQuery.get(getAllRecipeQuery)
@@ -115,6 +127,31 @@ class RecipeController {
 		//? Handle Bad Request
 		if (!RequestBodyHandler.isValidOptionalFields(recipeQuery, ["name","author"]))
 			return ResponseBody.handleBadRequest(response)
+
+		/* //? Grab the name  and author from the query
+		const name = recipeQuery.name.toString()
+		const author = recipeQuery.author.toString()
+
+		//? Find name(key) from Cache
+		const cacheHitNameResponse = await CachePolicy.isCacheHit(name)
+
+		//? Find author(key) from Cache
+		const cacheHitAuthorResponse = await CachePolicy.isCacheHit(author)
+
+
+		if (cacheHitNameResponse["hit"] === true)
+			return ResponseBody.success_found(response, {
+				status: 200,
+				message: `${name} fetched successfully`,
+				data: cacheHitNameResponse["value"]
+			})
+
+		if (cacheHitAuthorResponse["hit"] === true)
+			return ResponseBody.success_found(response, {
+				status: 200,
+				message: `Author named ${author} fetched successfully`,
+				data: cacheHitAuthorResponse["value"]
+			}) */
 
 		//? Check if the query is by name or author
 		if(request.query.hasOwnProperty('name') && request.query.hasOwnProperty('author')) {
