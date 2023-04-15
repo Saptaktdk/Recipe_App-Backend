@@ -1,4 +1,4 @@
 package com.saptak.recipe.controller;
 
-public class Profile {
+public class RecipeController {
 }

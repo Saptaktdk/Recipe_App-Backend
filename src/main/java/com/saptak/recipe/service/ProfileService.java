@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public interface ProfileService {
 
-    Profile getProfile() throws ExecutionException, InterruptedException;
+    Profile getProfile(String profileId) throws ExecutionException, InterruptedException;
 
     Profile getProfileById(String id) throws ExecutionException, InterruptedException;
 

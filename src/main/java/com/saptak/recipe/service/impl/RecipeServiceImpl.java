@@ -49,7 +49,7 @@ public class RecipeServiceImpl implements RecipeService {
         CollectionReference recipeCollectionRef = firestore.collection(recipeCollection);
 
         //? Build the query
-        Query query =
+
 
         return null;
     }
