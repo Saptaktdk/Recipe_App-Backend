@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public interface RecipeService {
-    List<Recipe> getAllRecipe() throws ExecutionException, InterruptedException;
+    List<Recipe> getAllRecipe(String profileId) throws ExecutionException, InterruptedException;
 
     List<Recipe> getRecipeByQuery(String name,
                                   String author) throws ExecutionException, InterruptedException, NullPointerException;

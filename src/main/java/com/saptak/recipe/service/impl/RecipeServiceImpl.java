@@ -24,11 +24,11 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipe> getAllRecipe() throws ExecutionException, InterruptedException {
+    public List<Recipe> getAllRecipe(String profileId) throws ExecutionException, InterruptedException {
         CollectionReference recipes = firestore.collection(recipeCollection);
 
         //? Get all the recipes
-        Query query = recipes;
+        Query query = recipes.whereEqualTo("profileId", profileId);
 
         QuerySnapshot querySnapshot = query.get().get();
         List<QueryDocumentSnapshot> recipeDocuments = querySnapshot.getDocuments();
