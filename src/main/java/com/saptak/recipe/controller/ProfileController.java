@@ -23,7 +23,7 @@ public class ProfileController {
     @Autowired
     ProfileService profileService;
 
-    @GetMapping(value= "")
+    @GetMapping(value= "/")
     public ResponseEntity<Map<String,Object>> getProfile(@RequestHeader("Authorization") String authHeader) {
         try {
             //? Extract the token
@@ -58,10 +58,8 @@ public class ProfileController {
             //? Return response
             return ResponseUtil.successGetProfile(getProfileById);
 
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (ExecutionException | InterruptedException e) {
+            return ResponseUtil.errorNotFound();
         }
     }
 
@@ -85,12 +83,8 @@ public class ProfileController {
             //? Return response
             return ResponseUtil.successUpdateProfile();
 
-        } catch (FirebaseAuthException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (FirebaseAuthException | ExecutionException | InterruptedException e) {
+            return ResponseUtil.errorUnauthorized();
         }
     }
 }

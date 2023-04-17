@@ -41,19 +41,29 @@ public class RecipeController {
             //? Return response
             return ResponseUtil.successGetMany(allRecipesByProfileId);
 
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (ExecutionException | InterruptedException e) {
+            return ResponseUtil.errorUnauthorized();
         }
     }
 
     @GetMapping(value = "/query")
     public ResponseEntity<Map<String, Object>> getRecipeByQuery(@RequestParam(defaultValue = "", required = false) String name,
                                                                 @RequestParam(defaultValue = "", required = false) String author){
-       return null;
-    }
+        try {
+            //? Get the recipe by query
+            List<Recipe> recipeByQuery = recipeService.getRecipeByQuery(name, author);
 
+            //? Check if recipes were found
+            if (recipeByQuery == null) return ResponseUtil.errorNotFound();
+
+            //? Return response
+            return ResponseUtil.successGetMany(recipeByQuery);
+
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Map<String, Object>> getRecipeById(@PathVariable("id") String id) {
@@ -68,10 +78,8 @@ public class RecipeController {
             //? Return response
             return ResponseUtil.successGetOne(recipeById);
 
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (ExecutionException | InterruptedException e) {
+            return ResponseUtil.errorNotFound();
         }
     }
 
@@ -88,17 +96,16 @@ public class RecipeController {
             //? Set the profile id from the JWT
             recipe.setProfileId(decodedToken.getUid());
 
+            //? Set the author from thom the profile
+            recipe.setAuthor(decodedToken.getName());
+
             //? Add and save in the database
             recipeService.addRecipe(recipe);
 
             //? Return response
             return ResponseUtil.successAddOne();
 
-        } catch (FirebaseAuthException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        } catch (FirebaseAuthException | ExecutionException | InterruptedException e) {
             return ResponseUtil.errorUnauthorized();
         }
 
@@ -118,18 +125,17 @@ public class RecipeController {
             //? Set the profileId from the JWT
             recipe.setProfileId(decodeToken.getUid());
 
+            //? Set the author from the profile
+            recipe.setAuthor(decodeToken.getName());
+
             //? Update and save in the database
             recipeService.updateRecipeById(id, recipe);
 
             //? Return response
             return ResponseUtil.successUpdateOne();
 
-        } catch (FirebaseAuthException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (FirebaseAuthException | ExecutionException | InterruptedException e) {
+            return ResponseUtil.errorUnauthorized();
         }
     }
 
@@ -149,12 +155,8 @@ public class RecipeController {
             //? Return response
             return ResponseUtil.successDeleteOne();
 
-        } catch (FirebaseAuthException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (FirebaseAuthException | ExecutionException | InterruptedException e) {
+            return ResponseUtil.errorUnauthorized();
         }
     }
 

@@ -3,6 +3,7 @@ package com.saptak.recipe.service.impl;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.saptak.recipe.entity.Recipe;
+import com.saptak.recipe.query.RecipeQueryBuilder;
 import com.saptak.recipe.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,9 +50,16 @@ public class RecipeServiceImpl implements RecipeService {
         CollectionReference recipeCollectionRef = firestore.collection(recipeCollection);
 
         //? Build the query
+        Query query = recipeCollectionRef;
+        query = RecipeQueryBuilder.buildQuery(query, name, author);
 
+        //? Query in the db
+        QuerySnapshot querySnapshot = query.get().get();
+        List<QueryDocumentSnapshot> recipeDocuments = querySnapshot.getDocuments();
 
-        return null;
+        return recipeDocuments.stream().map(queryDocumentSnapshot -> queryDocumentSnapshot
+                .toObject(Recipe.class))
+                .collect(Collectors.toList());
     }
 
     @Override

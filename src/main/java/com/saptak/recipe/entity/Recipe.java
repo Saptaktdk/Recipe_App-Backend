@@ -20,4 +20,6 @@ public class Recipe {
 
     private String directions;
 
+    private String author;
+
 }
