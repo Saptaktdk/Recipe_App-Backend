@@ -1,0 +1,22 @@
+version: "3.1"
+services:
+  api:
+    #? Set container and image name
+    container_name: recipe_app
+    image: recipe_app_image
+
+    #? Build image
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+
+    #? Environment
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: "/app/service-account.json"
+      GCLOUD_PROJECT_ID: "recipe-app-5f468"
+      GCLOUD_FIRESTORE_DB_URL: "https://recipe-app-5f468.firebaseio.com"
+      BUILD_NUMBER: "0"
+
+    #? Ports
+    ports:
+      - 8080:8080

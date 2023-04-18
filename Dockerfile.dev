@@ -1,0 +1,14 @@
+#FROM docker.oaplatform.org/oap-jvm:jdk-17-35-debian-buster-slim-36
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+COPY ./credentials/service-account.json /app/service-account.json
+
+ARG JAR_FILE=target/recipe-app-*.jar
+
+COPY ${JAR_FILE} /app/saptak/app.jar
+
+ENTRYPOINT ["java", "-jar","/app/saptak/app.jar"]
+
+EXPOSE 8080

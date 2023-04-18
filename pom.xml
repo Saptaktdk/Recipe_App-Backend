@@ -9,8 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.saptak</groupId>
-	<artifactId>recipe</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>recipe-app</artifactId>
+	<version>1.0.${BUILD_NUMBER}</version>
 	<name>recipe</name>
 	<description>This is a recipe app backend implementation  in Spring Boot</description>
 	<properties>
