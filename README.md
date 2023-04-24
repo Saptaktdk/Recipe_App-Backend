@@ -9,9 +9,6 @@ To install and run using docker, run docker-compose:
 
     docker-compose -f docker-compose.dev.yml up -d --build
 
-> In Staging Mode:
-
-    docker-compose -f docker-compose.staging.yml up -d --build
 
 or using Makefile:
 
